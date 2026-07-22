@@ -32,12 +32,16 @@ function getSourceLabel(source) {
   return SOURCE_LABELS[source] || source;
 }
 
-function getTelegramRegisterUrl() {
-  return `https://telegram.me/${TELEGRAM_BOT_USERNAME}?start=${TELEGRAM_START_BASE}`;
+function getTelegramRegisterUrl(source) {
+  const startParam = source && source !== 'direct'
+    ? `${TELEGRAM_START_BASE}_${source}`
+    : TELEGRAM_START_BASE;
+
+  return `https://telegram.me/${TELEGRAM_BOT_USERNAME}?start=${startParam}`;
 }
 
-function openTelegramBot() {
-  window.location.replace(getTelegramRegisterUrl());
+function openTelegramBot(source) {
+  window.location.replace(getTelegramRegisterUrl(source));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,9 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = form.name.value.trim();
     const phone = form.phone.value.trim();
 
+    const source = form.source?.value || trafficSource;
+
     if (!name || !phone) return;
 
-    openTelegramBot();
+    openTelegramBot(source);
   });
 
   document.querySelectorAll('.faq__item').forEach((item) => {
