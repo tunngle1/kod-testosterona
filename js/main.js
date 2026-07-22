@@ -1,8 +1,61 @@
+const TELEGRAM_BOT_USERNAME = 'Kod_testesterona_bot';
+const TELEGRAM_START_BASE = 'vebreg';
+
+const SOURCE_LABELS = {
+  instagram: 'Instagram',
+  telegram: 'Telegram',
+  direct: 'Прямой заход',
+};
+
+function getSourceFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('from') || params.get('utm_source') || '';
+}
+
+function normalizeSource(value) {
+  return value.trim().toLowerCase().replace(/\s+/g, '_');
+}
+
+function getTrafficSource() {
+  const fromUrl = getSourceFromUrl();
+
+  if (fromUrl) {
+    const source = normalizeSource(fromUrl);
+    sessionStorage.setItem('traffic_source', source);
+    return source;
+  }
+
+  return sessionStorage.getItem('traffic_source') || 'direct';
+}
+
+function getSourceLabel(source) {
+  return SOURCE_LABELS[source] || source;
+}
+
+function getTelegramRegisterUrl(source) {
+  const startParam = source && source !== 'direct'
+    ? `${TELEGRAM_START_BASE}_${source}`
+    : TELEGRAM_START_BASE;
+
+  return `https://telegram.me/${TELEGRAM_BOT_USERNAME}?start=${startParam}`;
+}
+
+function openTelegramBot(source) {
+  const url = getTelegramRegisterUrl(source);
+  window.location.replace(url);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const burger = document.getElementById('burger');
   const nav = document.getElementById('nav');
   const header = document.getElementById('header');
   const form = document.getElementById('registerForm');
+  const sourceInput = document.getElementById('trafficSource');
+  const trafficSource = getTrafficSource();
+
+  if (sourceInput) {
+    sourceInput.value = trafficSource;
+  }
 
   burger.addEventListener('click', () => {
     burger.classList.toggle('active');
@@ -27,13 +80,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const name = form.name.value.trim();
     const phone = form.phone.value.trim();
-    const message = encodeURIComponent(
-      `Привет! Хочу зарегистрироваться на вебинар «Код тестостерона» 28 июля.\nИмя: ${name}\nКонтакт: ${phone}`
-    );
 
-    // Замените username на реальный Telegram-аккаунт
-    window.open(`https://t.me/share/url?url=&text=${message}`, '_blank');
-    form.reset();
+    const source = form.source?.value || trafficSource;
+
+    if (!name || !phone) return;
+
+    openTelegramBot(source);
   });
 
   document.querySelectorAll('.faq__item').forEach((item) => {
