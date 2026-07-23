@@ -316,14 +316,17 @@
           <p class="cta-box__event">Бесплатный онлайн-вебинар «Код тестостерона»</p>
           <p class="cta-box__desc">Приходи онлайн, задавай вопросы в эфире, слушай разборы чужих ситуаций и смотри, где мужчины обычно косячат с анализами, восстановлением, ГЗТ, фармой и попытками «починить себя» вслепую.</p>
 
-          <form class="register-form" id="registerForm">
+          <form class="register-form register-form--bright" id="registerForm">
             <input type="hidden" name="source" id="trafficSource">
-            <div class="register-form__fields">
-              <input type="text" name="name" placeholder="Введите ваше имя" required class="register-form__input">
-              <input type="tel" name="phone" placeholder="Телефон или Telegram" required class="register-form__input">
+            <div class="register-form__card">
+              <p class="register-form__label">Запись на вебинар — бесплатно</p>
+              <div class="register-form__fields">
+                <input type="text" name="name" placeholder="Ваше имя" required class="register-form__input" autocomplete="name">
+                <input type="tel" name="phone" placeholder="Номер телефона" required class="register-form__input" autocomplete="tel" inputmode="tel">
+              </div>
+              <button type="submit" class="btn btn--primary btn--large btn--full btn--register">Зарегистрироваться</button>
+              <p class="register-form__note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
             </div>
-            <button type="submit" class="btn btn--primary btn--large btn--full">Зарегистрироваться</button>
-            <p class="register-form__note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
           </form>
         </div>
       </div>
