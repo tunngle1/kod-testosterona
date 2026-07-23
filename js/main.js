@@ -2,6 +2,16 @@ const TELEGRAM_BOT_USERNAME = 'Kod_testesterona_bot';
 const TELEGRAM_START_BASE = 'vebreg';
 
 const SOURCE_LABELS = {
+  zdorovie_ru: 'Здоровье ру',
+  alpha_protocol_youtube: 'Альфа протокол YouTube',
+  zhivaya_stal_youtube: 'Живая сталь YouTube',
+  alpha_inst: 'Альфа инст',
+  evseev2_inst: 'Евсеев 2 инст',
+  tg_main: 'ТГ основной',
+  stories: 'Сторис везде',
+  tg_closed: 'ТГ закрытый',
+  hvatov_taurus: 'hvatov_taurus',
+  moshkin_vladislav: 'moshkin_vladislav',
   instagram: 'Instagram',
   telegram: 'Telegram',
   direct: 'Прямой заход',
@@ -13,7 +23,11 @@ function getSourceFromUrl() {
 }
 
 function normalizeSource(value) {
-  return value.trim().toLowerCase().replace(/\s+/g, '_');
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '_')
+    .replace(/[^a-z0-9_]/g, '');
 }
 
 function getTrafficSource() {
