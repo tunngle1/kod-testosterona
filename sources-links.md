@@ -16,7 +16,7 @@
 | ТГ основной | https://kod-testosterona.vercel.app/?from=tg_main | `vebreg_tg_main` |
 | Сторис везде | https://kod-testosterona.vercel.app/?from=stories | `vebreg_stories` |
 | ТГ закрытый | https://kod-testosterona.vercel.app/?from=tg_closed | `vebreg_tg_closed` |
-| Рассылки | https://kod-testosterona.vercel.app/?from=rassylki | `vebreg_rassylki` |
+| Mailings | https://kod-testosterona.vercel.app/?from=mailings | `vebreg_mailings` |
 | hvatov_taurus | https://kod-testosterona.vercel.app/?from=hvatov_taurus | `vebreg_hvatov_taurus` |
 | moshkin_vladislav | https://kod-testosterona.vercel.app/?from=moshkin_vladislav | `vebreg_moshkin_vladislav` |
 | Instagram | https://kod-testosterona.vercel.app/?from=instagram | `vebreg_instagram` |
@@ -41,7 +41,7 @@ https://telegram.me/Kod_testesterona_bot?start=vebreg_evseev2_inst
 https://telegram.me/Kod_testesterona_bot?start=vebreg_tg_main
 https://telegram.me/Kod_testesterona_bot?start=vebreg_stories
 https://telegram.me/Kod_testesterona_bot?start=vebreg_tg_closed
-https://telegram.me/Kod_testesterona_bot?start=vebreg_rassylki
+https://telegram.me/Kod_testesterona_bot?start=vebreg_mailings
 https://telegram.me/Kod_testesterona_bot?start=vebreg_hvatov_taurus
 https://telegram.me/Kod_testesterona_bot?start=vebreg_moshkin_vladislav
 ```

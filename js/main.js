@@ -10,7 +10,7 @@ const SOURCE_LABELS = {
   tg_main: 'ТГ основной',
   stories: 'Сторис везде',
   tg_closed: 'ТГ закрытый',
-  rassylki: 'Рассылки',
+  mailings: 'Mailings',
   hvatov_taurus: 'hvatov_taurus',
   moshkin_vladislav: 'moshkin_vladislav',
   instagram: 'Instagram',
