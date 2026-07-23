@@ -58,12 +58,68 @@ function openTelegramBot(source) {
   window.location.replace(getTelegramRegisterUrl(source));
 }
 
+function normalizePhoneDigits(value) {
+  let digits = value.replace(/\D/g, '');
+
+  if (digits.length === 11 && digits.startsWith('8')) {
+    digits = `7${digits.slice(1)}`;
+  }
+
+  if (digits.length === 10 && digits.startsWith('9')) {
+    digits = `7${digits}`;
+  }
+
+  return digits;
+}
+
+function isValidRussianPhone(value) {
+  const digits = normalizePhoneDigits(value);
+
+  if (digits.length !== 11 || !digits.startsWith('7')) {
+    return false;
+  }
+
+  return /^7[3-9]\d{9}$/.test(digits);
+}
+
+function formatPhoneInput(value) {
+  const digits = normalizePhoneDigits(value).slice(0, 11);
+
+  if (!digits) return '';
+
+  const national = digits.startsWith('7') ? digits.slice(1) : digits;
+  let result = '+7';
+
+  if (national.length > 0) result += ` (${national.slice(0, 3)}`;
+  if (national.length >= 3) result += `) ${national.slice(3, 6)}`;
+  if (national.length >= 6) result += `-${national.slice(6, 8)}`;
+  if (national.length >= 8) result += `-${national.slice(8, 10)}`;
+
+  return result;
+}
+
+function setPhoneError(phoneInput, phoneError, message) {
+  if (message) {
+    phoneError.textContent = message;
+    phoneError.hidden = false;
+    phoneInput.classList.add('register-form__input--error');
+    phoneInput.setAttribute('aria-invalid', 'true');
+    return;
+  }
+
+  phoneError.hidden = true;
+  phoneInput.classList.remove('register-form__input--error');
+  phoneInput.removeAttribute('aria-invalid');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const burger = document.getElementById('burger');
   const nav = document.getElementById('nav');
   const header = document.getElementById('header');
   const form = document.getElementById('registerForm');
   const sourceInput = document.getElementById('trafficSource');
+  const phoneInput = document.getElementById('phoneInput');
+  const phoneError = document.getElementById('phoneError');
   const trafficSource = getTrafficSource();
 
   if (sourceInput) {
@@ -88,15 +144,41 @@ document.addEventListener('DOMContentLoaded', () => {
       : 'rgba(0, 0, 0, 0.92)';
   });
 
+  phoneInput.addEventListener('input', () => {
+    setPhoneError(phoneInput, phoneError, '');
+  });
+
+  phoneInput.addEventListener('blur', () => {
+    const phone = phoneInput.value.trim();
+    if (!phone) return;
+
+    phoneInput.value = formatPhoneInput(phone);
+
+    if (!isValidRussianPhone(phoneInput.value)) {
+      setPhoneError(phoneInput, phoneError, 'Введите корректный номер: +7 (999) 123-45-67');
+    }
+  });
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const name = form.name.value.trim();
-    const phone = form.phone.value.trim();
-
+    const phone = phoneInput.value.trim();
     const source = form.source?.value || trafficSource;
 
-    if (!name || !phone) return;
+    setPhoneError(phoneInput, phoneError, '');
+
+    if (!name) return;
+
+    if (!isValidRussianPhone(phone)) {
+      setPhoneError(
+        phoneInput,
+        phoneError,
+        'Введите корректный номер телефона в формате +7 (999) 123-45-67'
+      );
+      phoneInput.focus();
+      return;
+    }
 
     openTelegramBot(source);
   });
