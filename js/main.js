@@ -65,35 +65,49 @@ function openTelegramBot(source) {
   window.location.replace(getTelegramRegisterUrl(source));
 }
 
-function normalizePhoneDigits(value) {
-  let digits = value.replace(/\D/g, '');
+const PHONE_ERROR_MESSAGE = 'Введите корректный номер: +7 (999) 123-45-67 или +380 XX XXX XX XX';
 
+function getPhoneDigits(value) {
+  return value.replace(/\D/g, '');
+}
+
+function normalizeRussianDigits(digits) {
   if (digits.length === 11 && digits.startsWith('8')) {
-    digits = `7${digits.slice(1)}`;
+    return `7${digits.slice(1)}`;
   }
 
   if (digits.length === 10 && digits.startsWith('9')) {
-    digits = `7${digits}`;
+    return `7${digits}`;
   }
 
   return digits;
 }
 
-function isValidRussianPhone(value) {
-  const digits = normalizePhoneDigits(value);
+function isRussianPhone(value) {
+  const digits = normalizeRussianDigits(getPhoneDigits(value));
+  return digits.length === 11 && /^7[3-9]\d{9}$/.test(digits);
+}
 
-  if (digits.length !== 11 || !digits.startsWith('7')) {
+function isValidPhone(value) {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+
+  if (isRussianPhone(trimmed)) return true;
+
+  let digits = getPhoneDigits(trimmed);
+  if (digits.startsWith('00')) {
+    digits = digits.slice(2);
+  }
+
+  if (digits.length < 8 || digits.length > 15) {
     return false;
   }
 
-  return /^7[3-9]\d{9}$/.test(digits);
+  return /^\d+$/.test(digits) && !/^(\d)\1+$/.test(digits);
 }
 
-function formatPhoneInput(value) {
-  const digits = normalizePhoneDigits(value).slice(0, 11);
-
-  if (!digits) return '';
-
+function formatRussianPhone(value) {
+  const digits = normalizeRussianDigits(getPhoneDigits(value)).slice(0, 11);
   const national = digits.startsWith('7') ? digits.slice(1) : digits;
   let result = '+7';
 
@@ -103,6 +117,22 @@ function formatPhoneInput(value) {
   if (national.length >= 8) result += `-${national.slice(8, 10)}`;
 
   return result;
+}
+
+function formatPhoneInput(value) {
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+
+  if (isRussianPhone(trimmed)) {
+    return formatRussianPhone(trimmed);
+  }
+
+  let digits = getPhoneDigits(trimmed);
+  if (digits.startsWith('00')) {
+    digits = digits.slice(2);
+  }
+
+  return `+${digits.slice(0, 15)}`;
 }
 
 function setPhoneError(phoneInput, phoneError, message) {
@@ -161,8 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     phoneInput.value = formatPhoneInput(phone);
 
-    if (!isValidRussianPhone(phoneInput.value)) {
-      setPhoneError(phoneInput, phoneError, 'Введите корректный номер: +7 (999) 123-45-67');
+    if (!isValidPhone(phoneInput.value)) {
+      setPhoneError(phoneInput, phoneError, PHONE_ERROR_MESSAGE);
     }
   });
 
@@ -177,12 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!name) return;
 
-    if (!isValidRussianPhone(phone)) {
-      setPhoneError(
-        phoneInput,
-        phoneError,
-        'Введите корректный номер телефона в формате +7 (999) 123-45-67'
-      );
+    if (!isValidPhone(phone)) {
+      setPhoneError(phoneInput, phoneError, PHONE_ERROR_MESSAGE);
       phoneInput.focus();
       return;
     }
