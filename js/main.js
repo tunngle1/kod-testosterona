@@ -11,11 +11,16 @@ const SOURCE_LABELS = {
   stories: 'Сторис везде',
   tg_closed: 'ТГ закрытый',
   mailings: 'Mailings',
+  kazakov: 'Kazakov',
   hvatov_taurus: 'hvatov_taurus',
   moshkin_vladislav: 'moshkin_vladislav',
   instagram: 'Instagram',
   telegram: 'Telegram',
   direct: 'Прямой заход',
+};
+
+const SOURCE_START_SUFFIX = {
+  kazakov: 'Kazakov',
 };
 
 function getSourceFromUrl() {
@@ -48,8 +53,9 @@ function getSourceLabel(source) {
 }
 
 function getTelegramRegisterUrl(source) {
+  const suffix = SOURCE_START_SUFFIX[source] || source;
   const startParam = source && source !== 'direct'
-    ? `${TELEGRAM_START_BASE}_${source}`
+    ? `${TELEGRAM_START_BASE}_${suffix}`
     : TELEGRAM_START_BASE;
 
   return `https://telegram.me/${TELEGRAM_BOT_USERNAME}?start=${startParam}`;

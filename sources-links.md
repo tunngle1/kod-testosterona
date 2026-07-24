@@ -17,6 +17,7 @@
 | Сторис везде | https://kod-testosterona.vercel.app/?from=stories | `vebreg_stories` |
 | ТГ закрытый | https://kod-testosterona.vercel.app/?from=tg_closed | `vebreg_tg_closed` |
 | Mailings | https://kod-testosterona.vercel.app/?from=mailings | `vebreg_mailings` |
+| Kazakov | https://kod-testosterona.vercel.app/?from=Kazakov | `vebreg_Kazakov` |
 | hvatov_taurus | https://kod-testosterona.vercel.app/?from=hvatov_taurus | `vebreg_hvatov_taurus` |
 | moshkin_vladislav | https://kod-testosterona.vercel.app/?from=moshkin_vladislav | `vebreg_moshkin_vladislav` |
 | Instagram | https://kod-testosterona.vercel.app/?from=instagram | `vebreg_instagram` |
